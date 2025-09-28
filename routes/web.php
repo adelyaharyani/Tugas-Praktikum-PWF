@@ -9,24 +9,28 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+// Dashboard hanya sekali, dengan middleware auth + verified + session.timeout
 Route::get('/dashboard', function () {
     return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+})->middleware(['auth', 'verified', 'session.timeout'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
+    // Profile
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
+    // Logout
     Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');
 
-    // Hanya untuk admin & owner
+    // Products - hanya admin & owner
     Route::middleware(['role:admin,owner'])->group(function () {
-        Route::get('/products/{angka}', [ProductController::class, 'index'])->name('products.index');
+        Route::get('/products', [ProductController::class, 'index'])->name('products.index'); // daftar produk
     });
-    Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'session.timeout'])->name('dashboard');
 
+    // Produk detail dengan parameter (ganjil/genap alert)
+    Route::get('/product/{angka}', [ProductController::class, 'show'])->name('product.show');
 });
-// auth route BAWAAN Laravel Breeze/Jetstream
+
+// auth route bawaan Laravel Breeze/Jetstream
 require __DIR__.'/auth.php';
