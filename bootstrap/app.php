@@ -11,11 +11,12 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware) {
-    $middleware->alias([
-        'role' => \App\Http\Middleware\RoleMiddleware::class,
-    ]);
-})
-
+        $middleware->alias([
+            'role' => \App\Http\Middleware\RoleMiddleware::class,
+            'session.timeout' => \App\Http\Middleware\SessionTimeout::class, // tambahan alias
+        ]);
+    })
     ->withExceptions(function (Exceptions $exceptions): void {
         //
-    })->create();
+    })
+    ->create();

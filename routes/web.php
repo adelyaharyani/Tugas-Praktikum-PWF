@@ -23,7 +23,10 @@ Route::middleware('auth')->group(function () {
     Route::middleware(['role:admin,owner'])->group(function () {
         Route::get('/products/{angka}', [ProductController::class, 'index'])->name('products.index');
     });
-});
+    Route::get('/dashboard', function () {
+    return view('dashboard');
+})->middleware(['auth', 'session.timeout'])->name('dashboard');
 
+});
 // auth route BAWAAN Laravel Breeze/Jetstream
 require __DIR__.'/auth.php';
