@@ -11,12 +11,12 @@ class UtsController extends Controller
         return view('uts.index');
     }
 
-    public function utsWeb()
+    public function web()
     {
         return view('uts.web');
     }
 
-    public function utsDatabase()
+    public function database()
     {
         return view('uts.database');
     }
