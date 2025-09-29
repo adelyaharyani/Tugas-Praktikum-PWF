@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\UtsController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use Illuminate\Support\Facades\Route;
 
@@ -9,7 +10,7 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-// Dashboard hanya sekali, dengan middleware auth + verified + session.timeout
+// session.timeout
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified', 'session.timeout'])->name('dashboard');
@@ -30,7 +31,13 @@ Route::middleware('auth')->group(function () {
 
     // Produk detail dengan parameter (ganjil/genap alert)
     Route::get('/product/{angka}', [ProductController::class, 'show'])->name('product.show');
+
+    Route::prefix('uts')->group(function () {
+        Route::get('/', [UtsController::class, 'index'])->name('uts.index');
+        Route::get('/web', [UtsController::class, 'web'])->name('uts.web');
+        Route::get('/database', [UtsController::class, 'database'])->name('uts.database');
+    });
 });
 
-// auth route bawaan Laravel Breeze/Jetstream
+// auth 
 require __DIR__.'/auth.php';
