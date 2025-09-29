@@ -10,7 +10,7 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-// session.timeout
+// Dashboard → butuh login + verified + session timeout
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified', 'session.timeout'])->name('dashboard');
@@ -31,13 +31,12 @@ Route::middleware('auth')->group(function () {
 
     // Produk detail dengan parameter (ganjil/genap alert)
     Route::get('/product/{angka}', [ProductController::class, 'show'])->name('product.show');
-
-    Route::prefix('uts')->group(function () {
-        Route::get('/', [UtsController::class, 'index'])->name('uts.index');
-        Route::get('/web', [UtsController::class, 'web'])->name('uts.web');
-        Route::get('/database', [UtsController::class, 'database'])->name('uts.database');
-    });
 });
 
-// auth 
 require __DIR__.'/auth.php';
+
+Route::prefix('uts')->group(function () {
+    Route::get('/', [UtsController::class, 'index'])->name('uts.index');
+    Route::get('/web', [UtsController::class, 'web'])->name('uts.web');
+    Route::get('/database', [UtsController::class, 'database'])->name('uts.database');
+});
